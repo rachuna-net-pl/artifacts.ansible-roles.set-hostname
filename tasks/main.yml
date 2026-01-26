@@ -1,0 +1,26 @@
+---
+- name: "Change hostname"
+  hostname:
+    name: "{{ in_hostname_fqdn }}"
+  notify:
+    - "Reboot system"
+
+- name: "Change /etc/hosts"
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1       {{ in_hostname_fqdn.split('.')[0] }}       {{ in_hostname_fqdn }}"
+    state: present
+  when: in_hostname_fqdn.split('.') | length  > 1
+  notify:
+    - "Reboot system"
+
+- name: "Change /etc/hosts"
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1       {{ in_hostname_fqdn.split('.')[0] }}"
+    state: present
+  when: in_hostname_fqdn.split('.') | length  <= 1
+  notify:
+    - "Reboot system"
