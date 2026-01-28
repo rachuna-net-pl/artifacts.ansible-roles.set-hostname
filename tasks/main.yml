@@ -1,26 +1,26 @@
 ---
-- name: "Change hostname"
-  hostname:
+- name: Change hostname
+  ansible.builtin.hostname:
     name: "{{ in_hostname_fqdn }}"
   notify:
-    - "Reboot system"
+    - Reboot system
 
-- name: "Change /etc/hosts"
-  lineinfile:
+- name: Change /etc/hosts with FQDN
+  ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.1\.1'
-    line: "127.0.1.1       {{ in_hostname_fqdn.split('.')[0] }}       {{ in_hostname_fqdn }}"
+    line: "127.0.1.1       {{ in_hostname_fqdn | split('.') | first }}       {{ in_hostname_fqdn }}"
     state: present
-  when: in_hostname_fqdn.split('.') | length  > 1
+  when: in_hostname_fqdn | split('.') | length > 1
   notify:
-    - "Reboot system"
+    - Reboot system
 
-- name: "Change /etc/hosts"
-  lineinfile:
+- name: Change /etc/hosts with hostname only
+  ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: '^127\.0\.1\.1'
-    line: "127.0.1.1       {{ in_hostname_fqdn.split('.')[0] }}"
+    line: "127.0.1.1       {{ in_hostname_fqdn | split('.') | first }}"
     state: present
-  when: in_hostname_fqdn.split('.') | length  <= 1
+  when: in_hostname_fqdn | split('.') | length <= 1
   notify:
-    - "Reboot system"
+    - Reboot system
