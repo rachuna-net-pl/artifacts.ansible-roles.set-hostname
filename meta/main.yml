@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: set-hostname
+  role_name: set_hostname
   namespace: pl_rachuna_net
   author: "Maciej Rachuna"
   description: "Set hostname of the machine on Debian, Ubuntu, RHEL, AlmaLinux, and Alpine."
